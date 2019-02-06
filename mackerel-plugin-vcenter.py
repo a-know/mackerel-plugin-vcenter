@@ -80,10 +80,15 @@ def graph_definition(resource_dict):
 
     for cluster_name in resource_dict['vcenter']:
         graphdef['graphs'].setdefault(cluster_name, {})
-        graphdef['graphs'][cluster_name]['label'] = 'Cluster ' + cluster_name + ' resource usage'
+        graphdef['graphs'][cluster_name]['label'] = 'Cluster ' + cluster_name + ' resource'
         graphdef['graphs'][cluster_name]['unit'] = 'integer'
         graphdef['graphs'][cluster_name].setdefault('metrics', [])
-        graphdef['graphs'][cluster_name]['metrics'].append({'name': '*', 'label': '%1'})
+        graphdef['graphs'][cluster_name]['metrics'].append({'name': 'ClusterCPU', 'label': 'ClusterCPU'})
+        graphdef['graphs'][cluster_name]['metrics'].append({'name': 'ClusterMemory', 'label': 'ClusterMemory'})
+        graphdef['graphs'][cluster_name]['metrics'].append({'name': 'GuestsCPU', 'label': 'GuestsCPU'})
+        graphdef['graphs'][cluster_name]['metrics'].append({'name': 'GuestsMemory', 'label': 'GuestsMemory'})
+        graphdef['graphs'][cluster_name]['metrics'].append({'name': 'GuestsCPU_Userate', 'label': 'GuestsCPU Userate'})
+        graphdef['graphs'][cluster_name]['metrics'].append({'name': 'GuestsMemory_Userate', 'label': 'GuestsMemory Userate'})
 
     print(json.dumps(graphdef))
 
@@ -99,11 +104,15 @@ def metrics_output(resource_dict):
         hosts_mem = resource_dict['vcenter'][cluster_name]['hosts_mem']
         guests_cpu = resource_dict['vcenter'][cluster_name]['guests_cpu']
         guests_mem = resource_dict['vcenter'][cluster_name]['guests_mem']
+        guests_cpu_userate = float(resource_dict['vcenter'][cluster_name]['guests_cpu']) // hosts_cpu * 100
+        guests_mem_userate = float(resource_dict['vcenter'][cluster_name]['guests_mem']) // hosts_mem * 100
 
-        print(cluster_name + '.CPU', hosts_cpu, timestamp, sep='\t')
-        print(cluster_name + '.Memory', hosts_mem, timestamp, sep='\t')
+        print(cluster_name + '.ClusterCPU', hosts_cpu, timestamp, sep='\t')
+        print(cluster_name + '.ClusterMemory', hosts_mem, timestamp, sep='\t')
         print(cluster_name + '.GuestsCPU', guests_cpu, timestamp, sep='\t')
-        print(cluster_name + '.GuestsMEM', guests_mem, timestamp, sep='\t')
+        print(cluster_name + '.GuestsMemory', guests_mem, timestamp, sep='\t')
+        print(cluster_name + '.GuestsCPU_Userate', guests_cpu_userate, timestamp, sep='\t')
+        print(cluster_name + '.GuestsMemory_Userate', guests_mem_userate, timestamp, sep='\t')
 
 
 def main():
