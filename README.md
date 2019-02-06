@@ -1,7 +1,7 @@
 
 mackerel-plugin-vcenter
 
-Mackerel Plugin の自作したくて試しに作ったやつ
+Mackerel Plugin を自作したくて試しに作ったやつ
 
 - vCenter にアクセスして下記の情報を取得してくる
   - クラスタの CPU数、メモリ (ホストのCPUスレッド数、メモリを集計)
